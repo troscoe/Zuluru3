@@ -97,7 +97,7 @@ class TeamsController extends AppController {
 		$letters = $this->Teams->find()
 			->enableHydration(false)
 			// TODO: Use a query object here
-			->select(['letter' => 'DISTINCT SUBSTR(Teams.name, 1, 1)'])
+			->select(['letter' => 'SUBSTR(Teams.name, 1, 1)'])
 			->matching('Divisions.Leagues.Affiliates', function (Query $q) use ($affiliates) {
 				return $q->where(['Affiliates.id IN' => $affiliates]);
 			})
@@ -105,6 +105,7 @@ class TeamsController extends AppController {
 				'Divisions.is_open' => true,
 				'Affiliates.id IN' => $affiliates,
 			])
+			->group(['letter'])
 			->order(['letter'])
 			->toArray();
 
@@ -141,7 +142,7 @@ class TeamsController extends AppController {
 
 		$letters = $this->Teams->find()
 			->enableHydration(false)
-			->select(['letter' => 'DISTINCT SUBSTR(Teams.name, 1, 1)'])
+			->select(['letter' => 'SUBSTR(Teams.name, 1, 1)'])
 			->matching('Divisions.Leagues.Affiliates', function (Query $q) use ($affiliates) {
 				return $q->where(['Affiliates.id IN' => $affiliates]);
 			})
@@ -149,6 +150,7 @@ class TeamsController extends AppController {
 				'Divisions.is_open' => true,
 				'Affiliates.id IN' => $affiliates,
 			])
+			->group(['letter'])
 			->order(['letter'])
 			->toArray();
 
@@ -413,8 +415,9 @@ class TeamsController extends AppController {
 		}
 
 		$years = $this->Teams->Divisions->find()
-			->select(['year' => 'DISTINCT YEAR(open)'])
+			->select(['year' => 'YEAR(open)'])
 			->where(['YEAR(open) !=' => 0])
+			->group(['year'])
 			->order(['year'])
 			->toArray();
 

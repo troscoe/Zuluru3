@@ -169,11 +169,12 @@ class EventsController extends AppController {
 
 		$years = $this->Events->find()
 			->enableHydration(false)
-			->select(['year' => 'DISTINCT YEAR(Events.open)'])
+			->select(['year' => 'YEAR(Events.open)'])
 			->where([
 				'YEAR(Events.open) !=' => 0,
 				'Events.affiliate_id IN' => $affiliates,
 			])
+			->group(['year'])
 			->order(['year'])
 			->toArray();
 

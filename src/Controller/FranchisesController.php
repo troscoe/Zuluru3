@@ -52,10 +52,11 @@ class FranchisesController extends AppController {
 
 		$letters = $this->Franchises->find()
 			->enableHydration(false)
-			->select(['letter' => 'DISTINCT SUBSTR(Franchises.name, 1, 1)'])
+			->select(['letter' => 'SUBSTR(Franchises.name, 1, 1)'])
 			->where([
 				'Franchises.affiliate_id IN' => $affiliates,
 			])
+			->group(['letter'])
 			->order(['letter'])
 			->toArray();
 		$this->set(compact('letters'));
@@ -83,10 +84,11 @@ class FranchisesController extends AppController {
 
 		$letters = $this->Franchises->find()
 			->enableHydration(false)
-			->select(['letter' => 'DISTINCT SUBSTR(Franchises.name, 1, 1)'])
+			->select(['letter' => 'SUBSTR(Franchises.name, 1, 1)'])
 			->where([
 				'Franchises.affiliate_id IN' => $affiliates,
 			])
+			->group(['letter'])
 			->order(['letter'])
 			->toArray();
 
